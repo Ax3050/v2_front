@@ -1,0 +1,590 @@
+<div class="temp-project-investigator">
+
+  <div class="content">
+    <h1 class="title"> Proyectos </h1>
+
+
+    <div class="section">
+      <div class="header">
+        <h1>Cursante</h1>
+      </div>
+
+      <div class="grid gap-10">
+        <ng-container *ngFor="let proyectos_group of proyectos; let key = index">
+          <h2> Sección: {{proyectos_group.name}} </h2>
+          <mat-divider></mat-divider>
+
+          <ng-container *ngFor="let proyecto of proyectos_group.grupo">
+            <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <mat-icon class="material-symbols-outlined">folder</mat-icon>
+                    <span class="font-500"> {{proyecto.name}} </span>
+                    <span class="font-500" style="margin-left: 10px;"> ({{proyecto.AcademicYear.year}}) </span>
+                  </mat-panel-title>
+                  <mat-chip [class]="
+                      proyecto.status == 0 ? 'chip-status-grey' :
+                      proyecto.status == 1 ? 'chip-status-yellow' :
+                      proyecto.status == 2 ? 'chip-status-green' :
+                      proyecto.status == 3 ? 'chip-status-red' :'chip-status-yellow'" cdkDrag>
+
+                    {{
+                    proyecto.status == 0 ? 'En revisión' :
+                    proyecto.status == 1 ? 'En proceso' :
+                    proyecto.status == 2 ? 'Aprobado' :
+                    proyecto.status == 3 ? 'Reprobado' : 'Abandono'
+                    }}
+
+                  </mat-chip>
+                </mat-expansion-panel-header>
+
+                <div class="body-expansion">
+
+                  <div class="section-card">
+                    <div class="header-section-card">
+                      <mat-icon class="material-symbols-outlined">group</mat-icon>
+                      <h3>Investigadores</h3>
+                    </div>
+                    <mat-divider></mat-divider>
+
+                    <div class="list-investigators">
+
+                      <ng-container *ngFor="let inv of proyecto.projectStudent">
+                        <div class="card-investigator" *ngIf="inv.status == 1">
+                          <h3>Cedula: {{inv.investigator.people.cedula}}</h3>
+                          <h3>Nombre: {{inv.investigator.people.name}}</h3>
+                          <h3>Apellido: {{inv.investigator.people.lastname}}</h3>
+                        </div>
+                        <mat-divider></mat-divider>
+                      </ng-container>
+                    </div>
+                  </div>
+
+                  <div class="section-card">
+                    <div class="header-section-card">
+                      <mat-icon class="material-symbols-outlined">info</mat-icon>
+                      <h3>Información</h3>
+                    </div>
+                    <mat-divider></mat-divider>
+
+                    <div class="list-investigators">
+
+                      <div class="card-investigator">
+                        <mat-icon class="material-symbols-outlined">info</mat-icon>
+                        <h3>Proyecto: {{proyecto.name}}</h3>
+                      </div>
+                      <mat-divider></mat-divider>
+
+                      <div class="card-investigator">
+                        <mat-icon class="material-symbols-outlined">info</mat-icon>
+                        <h3>Area prioritaria: {{proyecto.AreaPrioritaria.name}} </h3>
+                      </div>
+                      <mat-divider></mat-divider>
+
+                      <div class="card-investigator">
+                        <mat-icon class="material-symbols-outlined">info</mat-icon>
+                        <h3>Linea de investigación: {{proyecto.LineaInvestigacion.name}} </h3>
+                      </div>
+                      <mat-divider></mat-divider>
+
+                      <div class="card-investigator">
+                        <mat-icon class="material-symbols-outlined">info</mat-icon>
+                        <h3>Dimensión espacial: {{proyecto.DimensionEspacial.name}} </h3>
+                      </div>
+                      <mat-divider></mat-divider>
+
+                      <div class="card-investigator">
+                        <mat-icon class="material-symbols-outlined">info</mat-icon>
+                        <h3>Sujeto social: {{proyecto.sujetoSocial}} </h3>
+                      </div>
+                      <mat-divider></mat-divider>
+
+                      <!--<div class="card-investigator">
+                        <mat-icon class="material-symbols-outlined">info</mat-icon>
+                        <h3>Area: Tal</h3>
+                      </div>-->
+                      <mat-divider></mat-divider>
+                    </div>
+                  </div>
+
+                  <div class="section-card">
+                    <div class="header-section-card">
+                      <mat-icon class="material-symbols-outlined">info</mat-icon>
+                      <h3>Datos académicos</h3>
+                    </div>
+                    <mat-divider></mat-divider>
+
+                    <div class="list-investigators">
+
+                      <div class="card-investigator">
+                        <mat-icon class="material-symbols-outlined">info</mat-icon>
+                        <h3>PNF: {{proyecto.pnf.name}} </h3>
+                      </div>
+                      <mat-divider></mat-divider>
+                      <div class="card-investigator">
+                        <mat-icon class="material-symbols-outlined">info</mat-icon>
+                        <h3>Trayecto: {{proyecto.trayecto.name}} </h3>
+                      </div>
+                      <mat-divider></mat-divider>
+
+                      <div class="card-investigator">
+                        <mat-icon class="material-symbols-outlined">info</mat-icon>
+                        <h3>Sección: {{proyecto.seccion.name}} </h3>
+                      </div>
+
+                      <div class="card-investigator" *ngIf="proyecto.status == 4" >
+                        <mat-icon class="material-symbols-outlined">info</mat-icon>
+                        <div class="form-group">
+                          <h3>Observaciones</h3>
+                          <textarea name="" id="" cols="80" rows="4" style="resize: none;" [value]="proyecto.description" class="input-square" placeholder="Observación"></textarea>
+                        </div>
+                      </div>
+                      <mat-divider></mat-divider>
+                    </div>
+                  </div>
+
+                  <div class="card-footer" *ngIf="proyecto.status == 0">
+                    <button class="btn-primary" (click)="setEdit(proyecto)">Modificar </button>
+                    <button class="btn-warning" (click)="changeStatus(proyecto, 1)"> Aceptar proyecto </button>
+                  </div>
+
+                  <div class="card-footer" *ngIf="proyecto.status == 1">
+                    <button class="btn-green" (click)="changeStatus(proyecto, 2) ; openModalPDF()">Aprobar </button>
+                    <button class="btn-secondary" (click)="changeStatus(proyecto, 3)"> Reprobar </button>
+                    <button class="btn-warning" (click)="openModalAbandono(proyecto)"> Abandono </button>
+                  </div>
+                </div>
+                <mat-divider></mat-divider>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </ng-container>
+
+        </ng-container>
+      </div>
+
+      <!-- <ng-container *ngFor="let proyectos_group of proyectos">
+        <ng-container *ngFor="let proyecto of proyectos_group">
+
+
+        </ng-container>
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon class="material-symbols-outlined">folder</mat-icon>
+                <span class="font-500"> {{proyecto.name}} </span>
+              </mat-panel-title>
+              <mat-chip
+                [class]="
+                  proyecto.status == 0 ? 'chip-status-grey' :
+                  proyecto.status == 1 ? 'chip-status-yellow' :
+                  proyecto.status == 2 ? 'chip-status-green' :'chip-status-red'"
+                  cdkDrag>
+
+                  {{
+                    proyecto.status == 0 ? 'En revisión' :
+                    proyecto.status == 1 ? 'En proceso' :
+                    proyecto.status == 2 ? 'Aprobado' : 'Reprobado'
+                  }}
+
+              </mat-chip>
+            </mat-expansion-panel-header>
+
+            <div class="body-expansion">
+
+              <div class="section-card">
+                <div class="header-section-card">
+                  <mat-icon class="material-symbols-outlined">group</mat-icon>
+                  <h3>Investigadores</h3>
+                </div>
+                <mat-divider></mat-divider>
+
+                <div class="list-investigators">
+
+                  <ng-container *ngFor="let inv of proyecto.projectStudent">
+                    <div class="card-investigator">
+                      <h3>Cedula: {{inv.investigator.people.cedula}}</h3>
+                      <h3>Nombre: {{inv.investigator.people.name}}</h3>
+                      <h3>Apellido: {{inv.investigator.people.lastname}}</h3>
+                    </div>
+                    <mat-divider></mat-divider>
+                  </ng-container>
+                </div>
+              </div>
+
+
+              <div class="section-card">
+                <div class="header-section-card">
+                  <mat-icon class="material-symbols-outlined">info</mat-icon>
+                  <h3>Información</h3>
+                </div>
+                <mat-divider></mat-divider>
+
+                <div class="list-investigators">
+
+                  <div class="card-investigator">
+                    <mat-icon class="material-symbols-outlined">info</mat-icon>
+                    <h3>Proyecto: {{proyecto.name}}</h3>
+                  </div>
+                  <mat-divider></mat-divider>
+
+                  <div class="card-investigator">
+                    <mat-icon class="material-symbols-outlined">info</mat-icon>
+                    <h3>Area prioritaria: {{proyecto.AreaPrioritaria.name}} </h3>
+                  </div>
+                  <mat-divider></mat-divider>
+
+                  <div class="card-investigator">
+                    <mat-icon class="material-symbols-outlined">info</mat-icon>
+                    <h3>Linea de investigación: {{proyecto.LineaInvestigacion.name}} </h3>
+                  </div>
+                  <mat-divider></mat-divider>
+
+                  <div class="card-investigator">
+                    <mat-icon class="material-symbols-outlined">info</mat-icon>
+                    <h3>Dimensión espacial: {{proyecto.DimensionEspacial.name}} </h3>
+                  </div>
+                  <mat-divider></mat-divider>
+
+                  <div class="card-investigator">
+                    <mat-icon class="material-symbols-outlined">info</mat-icon>
+                    <h3>Sujeto social: {{proyecto.SujetoSocial.name}} </h3>
+                  </div>
+                  <mat-divider></mat-divider>
+
+                  <div class="card-investigator">
+                    <mat-icon class="material-symbols-outlined">info</mat-icon>
+                    <h3>Area: Tal</h3>
+                  </div>
+                  <mat-divider></mat-divider>
+                </div>
+              </div>
+
+              <div class="section-card">
+                <div class="header-section-card">
+                  <mat-icon class="material-symbols-outlined">info</mat-icon>
+                  <h3>Datos académicos</h3>
+                </div>
+                <mat-divider></mat-divider>
+
+                <div class="list-investigators">
+
+                  <div class="card-investigator">
+                    <mat-icon class="material-symbols-outlined">info</mat-icon>
+                    <h3>PNF: {{proyecto.pnf.name}} </h3>
+                  </div>
+                  <mat-divider></mat-divider>
+                  <div class="card-investigator">
+                    <mat-icon class="material-symbols-outlined">info</mat-icon>
+                    <h3>Trayecto: {{proyecto.trayecto.name}} </h3>
+                  </div>
+                  <mat-divider></mat-divider>
+
+                  <div class="card-investigator">
+                    <mat-icon class="material-symbols-outlined">info</mat-icon>
+                    <h3>Sección: {{proyecto.seccion.name}} </h3>
+                  </div>
+                  <mat-divider></mat-divider>
+                </div>
+              </div>
+
+            </div>
+            <mat-divider></mat-divider>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ng-container> -->
+
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+
+    <h1>Anteriores</h1>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="material-symbols-outlined">folder</mat-icon>
+            <span class="font-500"> Proyecto 2 </span>
+          </mat-panel-title>
+          <mat-chip class="chip-status-green" cdkDrag>
+            Aprobado
+          </mat-chip>
+        </mat-expansion-panel-header>
+
+        <div class="body-expansion">
+          <button class="btn" routerLink="project-investigator" routerLinkActive="active"> <mat-icon
+              class="material-symbols-outlined">folder</mat-icon> Proyectos </button>
+          <mat-divider></mat-divider>
+
+        </div>
+        <mat-divider></mat-divider>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="material-symbols-outlined">folder</mat-icon>
+            <span class="font-500"> Proyecto 2 </span>
+          </mat-panel-title>
+          <mat-chip class="chip-status-red" cdkDrag>
+            Reprobado
+          </mat-chip>
+        </mat-expansion-panel-header>
+
+        <div class="body-expansion">
+          <button class="btn" routerLink="project-investigator" routerLinkActive="active"> <mat-icon
+              class="material-symbols-outlined">folder</mat-icon> Proyectos </button>
+          <mat-divider></mat-divider>
+
+        </div>
+        <mat-divider></mat-divider>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>
+
+
+<!-- * MODAL CONFIRM EDIT -->
+<ng-template #modal>
+  <mat-dialog-actions class="modal">
+    <div class="header">
+      <span>Proyecto</span>
+      <button class="btn btn-close" mat-dialog-close="true"> <mat-icon
+          class="material-symbols-outlined">close</mat-icon></button>
+    </div>
+
+    <div class="modal-body">
+      <h2 class="text-center font-600">Proyecto</h2>
+
+      <form class="grid" [formGroup]="form">
+
+        <div class="form-group">
+          <label>Nombre del proyecto</label>
+          <textarea name="" id="" cols="10" rows="2" class="input-square"
+            [ngClass]="{ 'errorCampos': getFieldInvalid('name') }" placeholder="Nombre del proyecto"
+            formControlName="name"></textarea>
+          <p *ngIf="getFieldInvalid('name')" class="text-error">Campo requerido</p>
+        </div>
+
+        <div class="content-two">
+          <div class="form-group">
+            <label>Estado</label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Selecciona el estado" formControlName="estadoId">
+              <ng-option *ngFor="let estado of estados?.data" [value]="estado?.id">{{ estado?.name }}</ng-option>
+            </ng-select>
+            <p *ngIf="getFieldInvalid('estadoId')" class="text-error">Campo requerido</p>
+          </div>
+
+          <div class="form-group">
+            <label>Municipio</label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Selecciona el municipio"
+              formControlName="municipioId">
+              <ng-option *ngFor="let municipio of municipios?.data" [value]="municipio?.id">{{ municipio?.name
+                }}</ng-option>
+            </ng-select>
+            <p *ngIf="getFieldInvalid('municipioId')" class="text-error">Campo requerido</p>
+          </div>
+        </div>
+
+        <div class="content-two">
+
+          <div class="form-group">
+            <label>Parroquia</label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Selecciona la parroquia"
+              formControlName="parroquiaId">
+              <ng-option *ngFor="let parroquia of parroquias?.data" [value]="parroquia?.id">{{ parroquia?.name
+                }}</ng-option>
+            </ng-select>
+            <p *ngIf="getFieldInvalid('municipioId')" class="text-error">Campo requerido</p>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="content-two">
+          <div class="form-group">
+            <label>Año académico </label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Selecciona el año academico"
+              formControlName="AcademicYearId">
+              <ng-option *ngFor="let academicYear of academicYears?.data" [value]="academicYear?.id">{{
+                academicYear?.year }}</ng-option>
+            </ng-select>
+            <p *ngIf="getFieldInvalid('AcademicYearId')" class="text-error">Campo requerido</p>
+          </div>
+          <div class="form-group">
+            <label>PNF</label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Selecciona el PNF" formControlName="pnfId">
+              <ng-option *ngFor="let pnf of pnfs?.data" [value]="pnf?.id">{{ pnf?.name }}</ng-option>
+            </ng-select>
+            <p *ngIf="getFieldInvalid('pnfId')" class="text-error">Campo requerido</p>
+
+          </div>
+        </div>
+
+        <div class="content-two">
+          <div class="form-group">
+            <label>Trayecto </label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Selecciona el trayecto" formControlName="trayectoId">
+              <ng-option *ngFor="let trayecto of trayectos" [value]="trayecto?.id">{{ trayecto?.name
+                }}</ng-option>
+            </ng-select>
+            <p *ngIf="getFieldInvalid('trayectoId')" class="text-error">Campo requerido</p>
+          </div>
+          <div class="form-group">
+            <label>Sección</label>
+            <ng-select notFoundText="Sin Resultados"
+              [readonly]="!getFieldValue('pnfId') || !getFieldValue('trayectoId') " (change)="getIvestigators()"
+              placeholder="Selecciona la sección" formControlName="seccionId">
+              <ng-option *ngFor="let seccion of secciones?.data" [value]="seccion?.id">{{ seccion?.name }}</ng-option>
+            </ng-select>
+            <p *ngIf="getFieldInvalid('seccionId')" class="text-error">Campo requerido</p>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+
+
+        <div class="content-two">
+          <div class="form-group">
+            <label>Area prioritaria </label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Area prioritaria" formControlName="AreaPrioritariaId">
+              <ng-option *ngFor="let area of areas?.data" [value]="area?.id">{{
+                area?.name }}</ng-option>
+            </ng-select>
+            <p *ngIf="getFieldInvalid('AreaPrioritariaId')" class="text-error">Campo requerido</p>
+          </div>
+
+          <div class="form-group">
+            <label>Linea de investigación</label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Linea de investigación"
+              formControlName="LineaInvestigacionId">
+              <ng-option *ngFor="let linea of lineas?.data" [value]="linea?.id">{{ linea?.name }}</ng-option>
+            </ng-select>
+            <p *ngIf="getFieldInvalid('LineaInvestigacionId')" class="text-error">Campo requerido</p>
+
+          </div>
+        </div>
+
+        <div class="content-two">
+          <div class="form-group">
+            <label>Dimensión espacial </label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Dimensión espacial"
+              formControlName="DimensionEspacialId">
+              <ng-option *ngFor="let dimenion of dimeniones?.data" [value]="dimenion?.id">{{
+                dimenion?.name }}</ng-option>
+            </ng-select>
+            <p *ngIf="getFieldInvalid('DimensionEspacialId')" class="text-error">Campo requerido</p>
+          </div>
+
+          <div class="form-group">
+            <label>Sujeto social</label>
+            <input class="input-square input-block" onlyLetter
+              [ngClass]="{ 'errorCampos': getFieldInvalid('sujetoSocial') }" placeholder="Nombre"
+              formControlName="sujetoSocial">
+            <p *ngIf="getFieldInvalid('sujetoSocial')" class="text-error">Campo requerido</p>
+
+          </div>
+        </div>
+
+      </form>
+
+      <mat-divider></mat-divider>
+      <div class="group-input-icon-left">
+        <input class="input-search" type="text">
+        <mat-icon class="blue">search</mat-icon>
+      </div>
+      <table mat-table [dataSource]="investigators" class="table">
+
+        <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="Nombres">
+          <th mat-header-cell *matHeaderCellDef> Nombres </th>
+          <td mat-cell *matCellDef="let element"> {{element.people?.name}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="Apellidos">
+          <th mat-header-cell *matHeaderCellDef> Apellidos </th>
+          <td mat-cell *matCellDef="let element"> {{element.people?.lastname}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="Cedula">
+          <th mat-header-cell *matHeaderCellDef> Cedula </th>
+          <td mat-cell *matCellDef="let element"> {{element.people?.cedula}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="Expediente">
+          <th mat-header-cell *matHeaderCellDef> Expediente </th>
+          <td mat-cell *matCellDef="let element"> {{element.pnf?.id}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="Opt.">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="content-btn" *ngIf="element?.isProject">
+              <button class="btn btn-secondary" *ngIf="element.status == 0"
+                (click)="openModalDesincorp(element.id, 1)"> Desincorporar </button>
+              <button class="btn btn-primary" *ngIf="element.status == 1"
+                (click)="incorporateInv(element.id, 0)"> Incorporar </button>
+            </div>
+
+            <div class="content-btn" *ngIf="!element?.isProject">
+              <button class="btn" *ngIf="element?.projectStudents?.length == 0"
+                [class.btn-primary]="isChecked(element.id)" (click)="checkStudent(element.id)">
+                <mat-icon>check</mat-icon> </button>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div class="footer">
+        <button mat-dialog-close="true" class="btn-secondary">Cancelar</button>
+        <button *ngIf="!edit" class="btn-primary" (click)="storeProject()">Registrar <mat-icon class="loader"
+            *ngIf="loading">cached</mat-icon>
+        </button>
+        <button *ngIf="edit" class="btn-primary" (click)="update()">Editar <mat-icon class="loader"
+            *ngIf="loading">cached</mat-icon> </button>
+      </div>
+    </div>
+
+  </mat-dialog-actions>
+</ng-template>
+
+
+<!-- * MODAL PDF -->
+<ng-template #modal>
+  <mat-dialog-actions class="modal">
+    <div class="modal-body">
+      <span class="close">&times;</span>
+      <p>Adjuntar archivo PDF:</p>
+      <input type="file" id="pdfFile">
+      <button class="btn-green" (click)="uploadPDF()">Subir</button>
+    </div>
+  </mat-dialog-actions>
+</ng-template>
+
+
+
+<swal #abandonoSwal title="Marcar como abandono" [showDenyButton]="true" denyButtonText="Cancelar" confirmButtonColor="#68bcd1"
+  denyButtonColor="#d16868" icon="warning" input="textarea" inputLabel="Observación" confirmButtonText="Continuar" ></swal>
+<swal #desincorporarSwal title="Seguro que quiere desincorporar?" [showDenyButton]="true" denyButtonText="Cancelar" confirmButtonColor="#d16868"
+  denyButtonColor="#68bcd1" icon="warning" confirmButtonText="Continuar"></swal>
+<swal #SuccessRegisterSwal title="Registrado con exito" confirmButtonColor="#68bcd1" icon="success"
+  confirmButtonText="Continuar"></swal>
+<swal #SuccessDeleteSwal title="Eliminado con exito" confirmButtonColor="#68bcd1" icon="success"
+  confirmButtonText="Continuar"></swal>
+<swal #SuccessUpdateSwal title="Modificado con exito" confirmButtonColor="#68bcd1" icon="success"
+  confirmButtonText="Continuar"></swal>

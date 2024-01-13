@@ -1,0 +1,178 @@
+<div class="temp-state">
+
+  <div class="content">
+    <h1 class="title"> Docente acompañante </h1>
+    <div class="grid justify-content-end">
+      <button class="btn-primary" (click)="openModal()"> Registrar <mat-icon>add_box</mat-icon> </button>
+    </div>
+
+    <div class="group-input-icon-left">
+      <input class="input-search"  (input)="onInputChange($event)" placeholder="Cedula o Nombre"
+        type="text">
+      <mat-icon class="blue">search</mat-icon>
+    </div>
+
+    <table mat-table [dataSource]="teachers?.data" class="table"  >
+        
+      <ng-container matColumnDef="Cedula">
+        <th mat-header-cell *matHeaderCellDef> Cédula </th>
+        <td mat-cell *matCellDef="let element"> {{element?.cedula}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Nombre">
+        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+        <td mat-cell *matCellDef="let element"> {{element?.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Apellido">
+        <th mat-header-cell *matHeaderCellDef> Apellido </th>
+        <td mat-cell *matCellDef="let element"> {{element?.lastname}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Usuario">
+        <th mat-header-cell *matHeaderCellDef> Usuario </th>
+        <td mat-cell *matCellDef="let element"> <div class="user-circle" [class.user-circle-green]="element?.user?.id" ></div> </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Opt.">
+        <th mat-header-cell *matHeaderCellDef style="width: 50px;"> </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="content-btn">
+            <button class="btn" (click)="setEdit(element)"> <mat-icon>edit</mat-icon> </button>
+            <button class="btn" [swal]="deleteSwal" (confirm)="remove(element)"> <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <mat-paginator [length]="pnfs?.total" [pageSize]="20" aria-describedby="asd" (page)="paginate($event)"
+    aria-label=""></mat-paginator>
+</div>
+
+<!-- * MODAL CONFIRM EDIT -->
+<ng-template #modal>
+  <mat-dialog-actions class="modal">
+    <div class="header">
+      <span></span>
+      <button class="btn btn-close" mat-dialog-close="true"> <mat-icon
+          class="material-symbols-outlined">close</mat-icon></button>
+    </div>
+    <mat-stepper [selectedIndex]="step" #stepper [linear]="!edit">
+      <mat-step [stepControl]="form" [editable]="edit">
+        <ng-template matStepLabel class="text-blue">Datos de la cuenta</ng-template>
+        <form class="form" [formGroup]="form" (submit)="edit ? update() : storePeople()">
+
+          <div class="form-group">
+            <label>Cédula</label>
+            <div class="append-group">
+              <select name="" id="" formControlName="nationality">
+                <option [value]="1" selected>V</option>
+                <option [value]="2">E</option>
+              </select>
+              <input class="input-square input-block" formControlName="cedula"
+                [readOnly]="edit" [class.disabled]="edit"
+                [ngClass]="{ 'errorCampos': getFieldInvalid('cedula') }" maxlength="8" onlyNumbers placeholder="Cedula">
+            </div>
+            <p *ngIf="getFieldInvalid('cedula')" class="text-error">Campo requerido</p>
+          </div>
+
+          <div class="form-group">
+            <label>Nombres</label>
+            <input class="input-square input-block" formControlName="name" onlyLetter
+              [ngClass]="{ 'errorCampos': getFieldInvalid('name') }" placeholder="Nombres">
+            <p *ngIf="getFieldInvalid('name')" class="text-error">Campo requerido</p>
+
+          </div>
+
+          <div class="form-group">
+            <label>Apellidos</label>
+            <input class="input-square input-block" formControlName="lastname" onlyLetter
+              [ngClass]="{ 'errorCampos': getFieldInvalid('lastname') }" placeholder="Apellidos">
+            <p *ngIf="getFieldInvalid('lastname')" class="text-error">Campo requerido</p>
+          </div>
+
+          <div class="form-group" *ngIf="err">
+            <p class="text-rojo text-center"> {{err}} </p>
+          </div>
+
+          <div class="form-group justify-self-center">
+            <button class="btn-primary  btn-block"> Continuar <mat-icon class="loader" *ngIf="loading">cached</mat-icon>
+            </button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel class="text-blue">Datos académicos</ng-template>
+
+        <form class="form gap-20 content-teacher" [formGroup]="formTeacher">
+
+          <div class="form-group justify-self-start">
+            <label for="">PNF</label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Selecciona el PNF" formControlName="pnfId">
+              <ng-option *ngFor="let pnf of pnfs?.data" [value]="pnf?.id">{{ pnf?.name }}</ng-option>
+            </ng-select>
+          </div>
+
+          <mat-divider></mat-divider>
+          <div class="flex align-items-center gap-10">
+            <div class="form-group">
+              <label for="">Trayecto</label>
+              <ng-select notFoundText="Sin Resultados" [readonly]="!getFieldTeacher('pnfId')"
+                formControlName="trayectosId" placeholder="Selecciona el trayecto">
+                <ng-option *ngFor="let trayecto of trayectos?.data" [value]="trayecto.id">{{ trayecto?.name
+                  }}</ng-option>
+              </ng-select>
+            </div>
+
+            <div class="form-group">
+              <label for="">Sección</label>
+              <ng-select notFoundText="Sin Resultados" [readonly]="!getFieldTeacher('trayectosId')"
+                formControlName="seccionesId" placeholder="Selecciona la sección">
+                <ng-option *ngFor="let seccion of secciones?.data" [value]="seccion.id">{{ seccion?.name }}</ng-option>
+              </ng-select>
+              <div class="text-error" *ngIf="error">esta sección ya está listada</div>
+            </div>
+
+            <button class="btn-primary" [class.disabled]="!canAdd" style="margin: 0px !important" [disabled]="!canAdd"
+              (click)="setList()"> Agregar</button>
+
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="content-list">
+            <div class="card card-list" *ngFor="let asignatura of asignaturas; let index = index">
+
+              <div class="card-list-body">
+                <h3>PNF: {{asignatura.pnf.name}} </h3>
+                <h3>Trayecto: {{asignatura.trayecto.name}}</h3>
+                <h3>Sección: {{asignatura.seccion.name}}</h3>
+              </div>
+              <button class="btn-secondary" (click)="removeList(index)"> <mat-icon>delete</mat-icon> </button>
+            </div>
+          </div>
+
+          <button class="btn-primary justify-self-end" [class.disabled]="asignaturas.length == 0"
+            [disabled]="asignaturas.length == 0" (click)="storeSignatures()"> Registrar <mat-icon class="loader"
+              *ngIf="loading">cached</mat-icon></button>
+        </form>
+      </mat-step>
+    </mat-stepper>
+
+  </mat-dialog-actions>
+</ng-template>
+
+<swal #deleteSwal title="Desea eliminar?" [showDenyButton]="true" denyButtonText="Cancelar" confirmButtonColor="#d16868"
+  denyButtonColor="#68bcd1" icon="warning" confirmButtonText="Continuar"></swal>
+<swal #SuccessRegisterSwal title="Registrado con exito" confirmButtonColor="#68bcd1" icon="success"
+  confirmButtonText="Continuar"></swal>
+<swal #SuccessDeleteSwal title="Eliminado con exito" confirmButtonColor="#68bcd1" icon="success"
+  confirmButtonText="Continuar"></swal>
+<swal #SuccessUpdateSwal title="Modificado con exito" confirmButtonColor="#68bcd1" icon="success"
+  confirmButtonText="Continuar"></swal>

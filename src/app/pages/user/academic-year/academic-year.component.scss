@@ -1,0 +1,158 @@
+.temp-state{
+  min-height: 100%;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  align-content: start;
+}
+
+
+.content {
+  width: 100%;
+  display: grid;
+  align-content: start;
+  grid-gap: 30px;
+
+  input{
+    max-width: none !important;
+  }
+}
+.input-square{
+  margin: 0px !important;
+}
+
+.title{
+  font-weight: 600;
+
+}
+
+.content-btn{
+  display: flex;
+}
+
+
+::ng-deep.mat-mdc-dialog-actions{
+  justify-content: stretch !important;
+}
+
+::ng-deep .mdc-dialog__actions{
+  display: grid !important;
+  align-items: stretch !important;
+}
+
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface{
+  display: grid !important;
+  overflow: inherit !important;
+}
+
+.modal{
+  align-content: start;
+  grid-gap: 15px;
+  padding: 20px;
+  max-height: 100vh !important;
+  overflow-y: auto !important;
+  .header{
+      display: flex;
+      align-self: start;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  &-body{
+      padding: 10px 20px;
+      display: grid;
+      grid-gap: 10px;
+  }
+  .content-image{
+      display: grid;
+      position: relative;
+      justify-self: center;
+      .image{
+          width: 75px;
+          height: 75px;
+          overflow: hidden;
+          img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+          }
+          border-radius: 50%;
+          -webkit-border-radius: 50%;
+          -moz-border-radius: 50%;
+          -ms-border-radius: 50%;
+          -o-border-radius: 50%;
+      }
+
+      .circle-edit{
+          position: absolute;
+          right: 0px;
+          bottom: -3px;
+          background-color: red;
+          width: 28px;
+          height: 28px;
+          padding: 0px !important;
+          &>*{
+              color: white !important;
+              font-size: 18px !important;
+              width: auto !important;
+              height: auto !important;
+          }
+          border-radius: 50%;
+          -webkit-border-radius: 50%;
+          -moz-border-radius: 50%;
+          -ms-border-radius: 50%;
+          -o-border-radius: 50%;
+      }
+  }
+
+  .radio{
+      p{
+          margin-left:30px;
+      }
+  }
+
+  .footer{
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      gap: 5px;
+  }
+
+  .send-code{
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      button{
+          padding: 0px !important;
+      }
+  }
+}
+
+::ng-deep .cdk-overlay-pane{
+  max-height: auto !important;
+  overflow-y: auto !important;
+}
+
+.modal{
+  .modal-body{
+    justify-items: stretch !important;
+  }
+  .footer{
+    justify-content: center;
+  }
+}
+
+
+.form{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+
+.btn-year{
+  background-color: #76898b24;
+  width: 100%;
+}

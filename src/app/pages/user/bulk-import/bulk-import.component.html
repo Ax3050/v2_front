@@ -1,0 +1,35 @@
+<div class="temp-bulk-import">
+
+  <div class="card">
+
+    <h1>Importar {{type == 1? 'investigadores' : 'profesores'}}</h1>
+
+    <div class="content-files">
+      <div>
+        <a download class="circle-file"  target="_blank" [href]="type == 1 ? '/assets/files/import-students.csv' : '/assets/files/import-teachers.csv' ">
+          <mat-icon class="material-symbols-outlined" >download</mat-icon>
+        </a>
+        <h3 class="font-500">Descargar planilla EXCEL</h3>
+      </div>
+
+      <div>
+
+        <div class="circle-file" (click)="selectFile(file)">
+          <mat-icon class="material-symbols-outlined" >upload</mat-icon>
+        </div>
+        <h3 class="font-500">{{file_name ? file_name : 'Cargar planilla EXCEL' }}</h3>
+        <input #file type="file" (change)="addFile($event)" style="display:none" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+
+      </div>
+
+    </div>
+
+  </div>
+  <h4 class="error" *ngIf="error"> {{error}} </h4>
+
+  <div class="load" *ngIf="loading">
+    <mat-icon class="loader"  >cached</mat-icon>
+  </div>
+</div>
+
+<swal #SuccessRegisterSwal title="Registrado con exito" confirmButtonColor="#68bcd1" icon="success" confirmButtonText="Continuar" ></swal>

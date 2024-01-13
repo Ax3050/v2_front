@@ -1,0 +1,169 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "./assets/theme/custom-ng-select.scss";
+
+// Plus imports for other components in your app.
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+
+//$autosmotos-v2-primary: mat.define-palette(mat.$indigo-palette);
+//$autosmotos-v2-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+// @include mat.all-component-themes($autosmotos-v2-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+//html, body { height: 100%; }
+
+// body { margin: 0; font-family: Ubuntu }
+
+/* You can add global styles to this file, and also import other style files */
+// @import "~@ng-select/ng-select/themes/default.theme.css";
+
+$md-primary: (
+    50 : #cecece,
+    100 : #cecece,
+    200 : #cecece,
+    300 : #cecece,
+    400 : #cecece,
+    500 : #68bcd1,
+    600 : #68bcd1,
+    700 : #68bcd1,
+    800 : #68bcd1,
+    900 : #68bcd1,
+    A100 : #ffffff,
+    A200 : #68bcd1,
+    A400 : #cecece,
+    A700 : #cecece,
+    contrast: (50 : #ffffff,
+        100 : #ffffff,
+        200 : #ffffff,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #ffffff,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-secondary: (
+    50 : #f9f9f9,
+    100 : #f0f0f0,
+    200 : #e7e7e7,
+    300 : #dddddd,
+    400 : #d5d5d5,
+    500 : #cecece,
+    600 : #c9c9c9,
+    700 : #c2c2c2,
+    800 : #bcbcbc,
+    900 : #b0b0b0,
+    A100 : #ffffff,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #ffe7e7,
+    contrast: (50 : #ffffff,
+        100 : #ffffff,
+        200 : #ffffff,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #ffffff,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$autosmotos-v2-primary: mat.define-palette($md-primary, A200, A100, A400);
+$autosmotos-v2-accent: mat.define-palette($md-secondary, A200, A100, A400);
+//$autosmotos-v2-primary: mat.define-palette(mat.$indigo-palette);
+//$autosmotos-v2-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$autosmotos-v2-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$autosmotos-v2-theme: mat.define-light-theme((color: (primary: $autosmotos-v2-primary,
+                accent: $autosmotos-v2-accent,
+                warn: $autosmotos-v2-warn,
+            )));
+
+@include mat.all-component-themes($autosmotos-v2-theme);
+
+:root {
+  --swiper-theme-color: red !important;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  padding-left: 25px;
+}
+
+.ng-select .ng-select-container .ng-value-container {
+  padding-left: 25px;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-input>input {
+  height: 30px;
+  padding-left: 15px !important;
+}
+
+.ng-select.ng-select-single .ng-select-container {
+  padding: 21px 0px;
+  border-radius: 8px;
+  border: 1px solid #787878;
+  width: 100%;
+}
+
+.ng-select .ng-arrow-wrapper .ng-arrow {
+  border-color: red transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 2.5px;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup {
+  color: black;
+  font-weight: 600;
+}
+
+.mat-horizontal-stepper-header-container{
+  .ng-star-inserted{
+    color: white ;
+  }
+  .mat-step-text-label{
+    color: #787878;
+  }
+
+}
+::ng-deep.mat-horizontal-content-container{
+  overflow: auto !important;
+}

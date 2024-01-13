@@ -1,0 +1,285 @@
+<div class="temp-login">
+
+
+  <div class="card">
+    <h2 class="text-center font-600 align-self-center">Registro de {{ type == 1 ? 'docente' : 'investigador'}}</h2>
+
+    <form class="form" *ngIf="type == 2" [formGroup]="formInvestigator" (submit)="signupInvestigator()">
+
+      <div class="form-group" formGroupName="people">
+        <label>Cedula</label>
+        <div class="append-group">
+          <select name="" id="" formControlName="nationality">
+            <option [value]="1" selected>V</option>
+            <option [value]="2">E</option>
+          </select>
+          <input class="input-square input-block" formControlName="cedula" (blur)="findTeacherCi()"
+            [ngClass]="{ 'errorCampos': getFieldInvalidInv('people.cedula') }" maxlength="8" onlyNumbers
+            placeholder="Cedula">
+        </div>
+        <p *ngIf="getFieldInvalidInv('people.cedula')" class="text-error">Campo requerido</p>
+      </div>
+      <div class="content-two">
+
+        <div class="form-group" formGroupName="people">
+          <label>Nombres</label>
+          <input class="input-square input-block" formControlName="name" onlyLetter
+            [readOnly]="disableInputs || peopleId" [class.disabled]="disableInputs || peopleId"
+            [ngClass]="{ 'errorCampos': getFieldInvalidInv('people.name') }" placeholder="Nombres">
+          <p *ngIf="getFieldInvalidInv('people.name')" class="text-error">Campo requerido</p>
+
+        </div>
+
+        <div class="form-group" formGroupName="people">
+          <label>Apellidos</label>
+          <input class="input-square input-block" formControlName="lastname" onlyLetter
+            [readOnly]="disableInputs || peopleId" [class.disabled]="disableInputs || peopleId"
+            [ngClass]="{ 'errorCampos': getFieldInvalidInv('people.lastname') }" placeholder="Apellidos">
+          <p *ngIf="getFieldInvalidInv('people.lastname')" class="text-error">Campo requerido</p>
+        </div>
+      </div>
+
+      <div class="form-group" formGroupName="user">
+        <label>Email</label>
+        <input class="input-square input-block" formControlName="email"
+          [ngClass]="{ 'errorCampos': getFieldInvalidInv('user.email') }" placeholder="Email">
+        <p *ngIf="getFieldInvalidInv('user.email')" class="text-error">Campo requerido</p>
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <div class="group-input-icon-right" formGroupName="user">
+          <mat-icon class="icon" [ngClass]="" (click)="viewPass = !viewPass"> {{viewPass?'visibility':'visibility_off'}}
+          </mat-icon>
+          <input [type]="viewPass ? 'text' : 'password'" formControlName="password"
+            [ngClass]="{ 'errorCampos': getFieldInvalidInv('user.password') }" class="input-square input-block"
+            placeholder="Contraseña" maxlength="25">
+        </div>
+        <p *ngIf="getFieldInvalidInv('user.password')" class="text-error">Campo requerido</p>
+      </div>
+
+      <h2 class="text-center font-600">Datos academicos</h2>
+
+      <div class="form-group">
+        <label>Expediente</label>
+        <input class="input-square input-block" onlyNumbers
+          [readOnly]="disableInputs || peopleId" [class.disabled]="disableInputs || peopleId"
+          [ngClass]="{ 'errorCampos': getFieldInvalidInv('exp') }" placeholder="Expediente" formControlName="exp" maxlength="10">
+        <p *ngIf="getFieldInvalidInv('exp')" class="text-error">Campo requerido</p>
+      </div>
+
+      <div class="form-group">
+        <label>PNF</label>
+        <input class="input-square input-block"
+          [class.disabled]="disableInputs || peopleId" [readOnly]="disableInputs || peopleId"
+          [ngClass]="{ 'errorCampos': getFieldInvalidInv('pnf') }" placeholder="PNF" formControlName="pnf" >
+        <p *ngIf="getFieldInvalidInv('pnf')" class="text-error">Campo requerido</p>
+
+      </div>
+
+      <div class="form-group">
+        <label>Trayecto </label>
+        <input class="input-square input-block"
+          [readOnly]="disableInputs || peopleId" [class.disabled]="disableInputs || peopleId"
+          [ngClass]="{ 'errorCampos': getFieldInvalidInv('trayecto') }" placeholder="Trayecto" formControlName="trayecto">
+        <p *ngIf="getFieldInvalidInv('trayecto')" class="text-error">Campo requerido</p>
+      </div>
+
+      <div class="form-group">
+        <label>Sección</label>
+        <input class="input-square input-block"
+          [readOnly]="disableInputs || peopleId" [class.disabled]="disableInputs || peopleId"
+          [ngClass]="{ 'errorCampos': getFieldInvalidInv('seccion') }" placeholder="Seccion" formControlName="seccion">
+        <p *ngIf="getFieldInvalidInv('seccion')" class="text-error">Campo requerido</p>
+      </div>
+
+      <div class="form-group" *ngIf="errorT > 0">
+        <p class="text-rojo text-center" *ngIf="errorT == 1">Esta cedula no ha sido registrada en el sistema.</p>
+        <p class="text-rojo text-center" *ngIf="errorT == 2">La cedula ingresada no pertenece a un estudiante.</p>
+        <p class="text-rojo text-center" *ngIf="errorT == 3">Esta cuenta ya ha sido creada.</p>
+      </div>
+
+      <div class="form-group" *ngIf="err">
+        <p class="text-rojo text-center">{{err}}</p>
+      </div>
+
+      <div class="form-group justify-self-center">
+        <button class="btn-primary  btn-block"> Registrarse <mat-icon class="loader" *ngIf="loading">cached</mat-icon>
+        </button>
+      </div>
+
+      <div class="flex align-items-center justify-content-center">
+        <p>¿Ya tienes una cuenta?</p> <button type="button" class="btn text-blue" routerLink="/">Inicia sesión</button>
+      </div>
+    </form>
+
+    <mat-stepper [selectedIndex]="step" *ngIf="type == 1" #stepper [linear]="true">
+      <mat-step [stepControl]="form" [editable]="false">
+        <ng-template matStepLabel class="text-blue">Datos de la cuenta</ng-template>
+        <form class="form" [formGroup]="form" (submit)="signup()">
+
+          <div class="form-group" formGroupName="people">
+            <label>Cedula</label>
+            <div class="append-group">
+              <select name="" id="" formControlName="nationality">
+                <option [value]="1" selected>V</option>
+                <option [value]="2">E</option>
+              </select>
+              <input class="input-square input-block" (blur)="findTeacherCi()" formControlName="cedula"
+                [ngClass]="{ 'errorCampos': getFieldInvalid('people.cedula') }" maxlength="8" onlyNumbers
+                placeholder="Cedula">
+            </div>
+            <p *ngIf="getFieldInvalid('people.cedula') && getField('people.cedula').hasError('required')" class="text-error">Campo requerido</p>
+            <p *ngIf="getFieldInvalid('people.cedula') && getField('people.cedula').hasError('minlength')" class="text-error">la longitud minima es 7</p>
+          </div>
+
+          <div class="form-group" formGroupName="people">
+            <label>Nombres</label>
+            <input class="input-square input-block" [class.disabled]="disableInputs || dataTeacher"
+              formControlName="name" [readOnly]="disableInputs || dataTeacher" onlyLetter
+              [ngClass]="{ 'errorCampos': getFieldInvalid('people.name') }" placeholder="Nombres">
+            <p *ngIf="getFieldInvalid('people.name')" class="text-error">Campo requerido</p>
+
+          </div>
+
+          <div class="form-group" formGroupName="people">
+            <label>Apellidos</label>
+            <input class="input-square input-block" [class.disabled]="disableInputs || dataTeacher"
+              [readOnly]="disableInputs || dataTeacher" formControlName="lastname" onlyLetter
+              [ngClass]="{ 'errorCampos': getFieldInvalid('people.lastname') }" placeholder="Apellidos">
+            <p *ngIf="getFieldInvalid('people.lastname')" class="text-error">Campo requerido</p>
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input class="input-square input-block" [class.disabled]="disableInputs" [readOnly]="disableInputs"
+              formControlName="email" [ngClass]="{ 'errorCampos': getFieldInvalid('email') }" placeholder="Email">
+            <p *ngIf="getFieldInvalid('email')" class="text-error">Campo requerido</p>
+          </div>
+
+          <div class="form-group">
+            <div class="group-input-icon-right">
+              <mat-icon class="icon" [ngClass]="" (click)="viewPass = !viewPass">
+                {{viewPass?'visibility':'visibility_off'}} </mat-icon>
+              <input [type]="viewPass ? 'text' : 'password'" formControlName="password" [class.disabled]="disableInputs"
+                [readOnly]="disableInputs" [ngClass]="{ 'errorCampos': getFieldInvalid('password') }"
+                class="input-square input-block" placeholder="Contraseña" maxlength="25">
+            </div>
+            <p *ngIf="getFieldInvalid('password')" class="text-error">Campo requerido</p>
+          </div>
+
+          <div class="form-group" *ngIf="err">
+            <p class="text-rojo text-center">{{err}}</p>
+          </div>
+          <div class="form-group" *ngIf="errorT > 0">
+            <p class="text-rojo text-center" *ngIf="errorT == 1">Esta cedula no ha sido registrada en el sistema.</p>
+            <p class="text-rojo text-center" *ngIf="errorT == 2">La cedula ingresada no pertenece a un docente.</p>
+            <p class="text-rojo text-center" *ngIf="errorT == 3">Esta cuenta ya ha sido creada.</p>
+          </div>
+
+          <div class="form-group justify-self-center">
+            <button class="btn-primary  btn-block"> Continuar <mat-icon class="loader" *ngIf="loading">cached</mat-icon>
+            </button>
+          </div>
+
+          <div class="flex align-items-center justify-content-center">
+            <p>¿Ya tienes una cuenta?</p> <button type="button" class="btn text-blue" routerLink="/">Inicia
+              sesión</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel class="text-blue">Datos academicos</ng-template>
+
+        <form class="form gap-20 content-teacher" [formGroup]="formTeacher">
+
+          <div class="form-group justify-self-start">
+            <label for="">PNF</label>
+            <ng-select notFoundText="Sin Resultados" placeholder="Selecciona el PNF" formControlName="pnfId">
+              <ng-option *ngFor="let pnf of pnfs?.data" [value]="pnf?.id">{{ pnf?.name }}</ng-option>
+            </ng-select>
+          </div>
+
+          <mat-divider></mat-divider>
+          <div class="flex align-items-center gap-10">
+            <div class="form-group">
+              <label for="">Trayecto</label>
+              <ng-select notFoundText="Sin Resultados" [readonly]="!getFieldTeacher('pnfId')"
+                formControlName="trayectosId" placeholder="Selecciona el trayecto">
+                <ng-option *ngFor="let trayecto of trayectos?.data" [value]="trayecto.id">{{ trayecto?.name
+                  }}</ng-option>
+              </ng-select>
+            </div>
+
+            <div class="form-group">
+              <label for="">Sección</label>
+              <ng-select notFoundText="Sin Resultados" [readonly]="!getFieldTeacher('trayectosId')"
+                formControlName="seccionesId" placeholder="Selecciona la sección">
+                <ng-option *ngFor="let seccion of secciones?.data" [value]="seccion.id">{{ seccion?.name }}</ng-option>
+              </ng-select>
+              <div class="text-error" *ngIf="error">esta sección ya está listada</div>
+            </div>
+
+            <button class="btn-primary" [class.disabled]="!canAdd" style="margin: 0px !important" [disabled]="!canAdd"
+              (click)="setList()"> Agregar</button>
+
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="content-list">
+            <div class="card card-list" *ngFor="let asignatura of asignaturas; let index = index">
+
+              <div class="card-list-body">
+                <h3>PNF: {{asignatura.pnf.name}} </h3>
+                <h3>Trayecto: {{asignatura.trayecto.name}}</h3>
+                <h3>Sección: {{asignatura.seccion.name}}</h3>
+              </div>
+              <button class="btn-secondary" (click)="removeList(index)"> <mat-icon>delete</mat-icon> </button>
+            </div>
+          </div>
+
+          <button class="btn-primary justify-self-end" [class.disabled]="asignaturas.length == 0"
+            [disabled]="asignaturas.length == 0" (click)="storeSignatures()"> Registrar <mat-icon class="loader"
+              *ngIf="loading">cached</mat-icon></button>
+        </form>
+      </mat-step>
+    </mat-stepper>
+
+  </div>
+</div>
+
+
+<!-- * MODAL CONFIRM EDIT -->
+<ng-template #modal>
+  <mat-dialog-actions class="modal">
+    <div class="header">
+      <span></span>
+      <button class="btn btn-close" mat-dialog-close="true"> <mat-icon
+          class="material-symbols-outlined">close</mat-icon></button>
+    </div>
+
+    <div class="modal-body">
+      <h2 class="text-center font-600"> ¿Como quieres registrarte?</h2>
+
+      <div class="card card-option">
+        <div class="content-circle">
+          <mat-icon class="material-symbols-outlined">school</mat-icon>
+        </div>
+
+        <h2 class="font-600">Docente acompañante</h2>
+      </div>
+
+      <div class="card card-option">
+        <div class="content-circle">
+          <mat-icon class="material-symbols-outlined">groups_2</mat-icon>
+        </div>
+        <h2 class="font-600">Investigador lider</h2>
+      </div>
+    </div>
+
+  </mat-dialog-actions>
+</ng-template>
+
+<swal #SuccessSwal title="Te has registrado con exito!" text="ya puedes iniciar sesión con tus datos"
+  confirmButtonColor="#68bcd1" icon="success" confirmButtonText="Continuar"></swal>

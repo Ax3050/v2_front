@@ -1,0 +1,155 @@
+<div class="temp-login">
+
+  <div class="grid justify-items-center align-content-center gap-20">
+    <div class="content-logo">
+      <img src="/assets/image/logo.jpeg" alt="">
+    </div>
+    <h1 class="title text-center">SISTEMA DE GESTIÓN DE PROYECTO</h1>
+  </div>
+
+  <div class="card">
+    <h2 class="text-center font-600 align-self-center">Inicia sesión</h2>
+
+    <form [formGroup]="form" (submit)="login()">
+
+      <div class="form-group">
+        <label for="">Correo</label>
+        <input type="text" class="input-square" [ngClass]="{ 'errorCampos': getFieldInvalid('email') }"
+          formControlName="email">
+        <p *ngIf="getFieldInvalid('email')" class="text-error">Campo requerido</p>
+      </div>
+
+      <div class="form-group">
+        <label for="">Clave</label>
+        <input type="password" class="input-square" [ngClass]="{ 'errorCampos': getFieldInvalid('password') }"
+          formControlName="password">
+        <p *ngIf="getFieldInvalid('password')" class="text-error">Campo requerido</p>
+      </div>
+
+      <div class="form-group">
+        <p *ngIf="error" class="text-rojo text-center">Credenciales invalidas.</p>
+      </div>
+
+      <div class="form-group">
+        <button class="btn-primary btn-block"> Iniciar sesión <mat-icon class="loader" *ngIf="loading">cached</mat-icon>
+        </button>
+      </div>
+
+      <div class="flex align-items-center justify-content-center">
+        <p>¿No posees cuenta?</p> <button type="button" class="btn text-blue" (click)="openModal()">Registrarse</button>
+      </div>
+      <div class="flex align-items-center justify-content-center">
+        <p>¿No recuerdas tu contraseña?</p> <button type="button" class="btn text-blue"
+          (click)="openModalRecovery()">Recuperala</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+
+<!-- * MODAL CONFIRM EDIT -->
+<ng-template #modal>
+  <mat-dialog-actions class="modal">
+    <div class="header">
+      <span></span>
+      <button class="btn btn-close" mat-dialog-close="true"> <mat-icon
+          class="material-symbols-outlined">close</mat-icon></button>
+    </div>
+
+    <div class="modal-body">
+      <h2 class="text-center font-600"> ¿Como quieres registrarte?</h2>
+
+      <div class="card card-option" mat-dialog-close="true" routerLink="signup" [queryParams]="{type:1}">
+        <div class="content-circle">
+          <mat-icon class="material-symbols-outlined">school</mat-icon>
+        </div>
+
+        <h2 class="font-600">Docente acompañante</h2>
+      </div>
+
+      <div class="card card-option" mat-dialog-close="true" routerLink="signup" [queryParams]="{type:2}">
+        <div class="content-circle">
+          <mat-icon class="material-symbols-outlined">groups_2</mat-icon>
+        </div>
+        <h2 class="font-600">Investigador lider</h2>
+      </div>
+    </div>
+
+  </mat-dialog-actions>
+</ng-template>
+
+<!-- * MODAL CONFIRM EDIT -->
+<ng-template #modalRecovery>
+  <mat-dialog-actions class="modal">
+    <div class="header">
+      <h3 class="font-600">Ingrese el correo</h3>
+      <button class="btn btn-close" mat-dialog-close="true"> <mat-icon
+          class="material-symbols-outlined">close</mat-icon></button>
+    </div>
+
+    <div class="modal-body">
+      <form [formGroup]="form" (submit)="sendEmail()" *ngIf="fase_recovery == 0">
+
+        <div class="form-group">
+          <label for="">Correo</label>
+          <input type="text" class="input-square" [ngClass]="{ 'errorCampos': getFieldInvalid('email') }"
+            formControlName="email">
+          <p *ngIf="getFieldInvalid('email')" class="text-error">Campo requerido</p>
+        </div>
+
+        <div class="form-group">
+          <button class="btn-primary btn-block"> Enviar correo <mat-icon class="loader"
+              *ngIf="loading">cached</mat-icon> </button>
+          <p class="text-error" *ngIf="err_msg">{{err_msg}}</p>
+
+        </div>
+
+      </form>
+
+      <form [formGroup]="formCode" (submit)="sendCode()" *ngIf="fase_recovery == 1">
+
+        <div class="form-group">
+          <label for="">Código</label>
+          <input type="text" class="input-square" [ngClass]="{ 'errorCampos': getFieldInvalidCode('code') }"
+            formControlName="code">
+          <p *ngIf="getFieldInvalidCode('code')" class="text-error">Campo requerido</p>
+        </div>
+
+        <div class="form-group">
+          <button class="btn-primary btn-block"> Enviar código <mat-icon class="loader"
+              *ngIf="loading">cached</mat-icon> </button>
+          <p class="text-error" *ngIf="err_msg">{{err_msg}}</p>
+
+        </div>
+
+      </form>
+
+      <form [formGroup]="formPass" (submit)="changePassword()" *ngIf="fase_recovery == 2">
+
+        <div class="form-group">
+          <label for="">Clave</label>
+          <input type="password" class="input-square" [ngClass]="{ 'errorCampos': getFieldInvalidPass('password') }"
+            formControlName="password">
+          <p *ngIf="getFieldInvalidPass('password')" class="text-error">Campo requerido</p>
+        </div>
+
+        <div class="form-group">
+          <label for="">Confirmar Clave</label>
+          <input type="password" class="input-square" [ngClass]="{ 'errorCampos': getFieldInvalidPass('confirm_password') }"
+            formControlName="confirm_password">
+          <p *ngIf="getFieldInvalidPass('confirm_password')" class="text-error">Campo requerido</p>
+        </div>
+
+        <div class="form-group">
+          <button class="btn-primary btn-block"> Cambiar clave <mat-icon class="loader"
+              *ngIf="loading">cached</mat-icon> </button>
+          <p class="text-error" *ngIf="err_msg">{{err_msg}}</p>
+
+        </div>
+
+      </form>
+    </div>
+
+  </mat-dialog-actions>
+</ng-template>

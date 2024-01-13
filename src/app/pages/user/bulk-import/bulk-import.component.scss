@@ -1,0 +1,59 @@
+.temp-bulk-import{
+  display: grid;
+  position: relative;
+  height: 100%;
+  align-content: center;
+  padding: 20px;
+  .card{
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+  }
+
+  .content-files{
+    display: grid;
+    padding-top: 20px;
+    grid-template-columns: auto auto;
+    div{
+      display: flex;
+      gap: 5px;
+      align-items: center ;
+    }
+
+    .circle-file{
+      background-color: #CECECE;
+      width: 50px;
+      height: 50px;
+      display: grid;
+      cursor: pointer;
+      place-content: center;
+      border-radius: 50%;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      -o-border-radius: 50%;
+    }
+  }
+}
+
+.error{
+  margin-top: 20px;
+  color: red;
+  text-align: center;
+}
+
+.load{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: grid;
+  place-content: center;
+  *{
+    color: white;
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+}

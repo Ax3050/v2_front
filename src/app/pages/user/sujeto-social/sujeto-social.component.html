@@ -1,0 +1,84 @@
+<div class="temp-state">
+
+  <div class="content">
+    <h1 class="title"> Sujeto social </h1>
+    <div class="grid justify-content-end">
+      <button class="btn-primary" (click)="openModal()"> Registrar <mat-icon>add_box</mat-icon> </button>
+    </div>
+
+    <table mat-table [dataSource]="sujetos?.data" class="table">
+
+      <ng-container matColumnDef="Dimensión espacial">
+        <th mat-header-cell *matHeaderCellDef> Dimensión espacial </th>
+        <td mat-cell *matCellDef="let element"> {{element?.DimensionEspacial?.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Sujeto social">
+        <th mat-header-cell *matHeaderCellDef> Sujeto social </th>
+        <td mat-cell *matCellDef="let element"> {{element?.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Opt.">
+        <th mat-header-cell *matHeaderCellDef style="width: 50px;" > </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="content-btn">
+            <button class="btn" (click)="setEdit(element)" > <mat-icon>edit</mat-icon> </button>
+            <button class="btn" [swal]="deleteSwal" (confirm)="remove(element?.id)" > <mat-icon>delete</mat-icon> </button>
+          </div>
+        </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <mat-paginator [length]="sujetos?.total" [pageSize]="20" aria-describedby="asd" (page)="paginate($event)" aria-label=""></mat-paginator>
+</div>
+
+
+<!-- * MODAL CONFIRM EDIT -->
+<ng-template #modal>
+  <mat-dialog-actions class="modal">
+    <div class="header">
+      <span></span>
+      <button class="btn btn-close" mat-dialog-close="true"> <mat-icon
+          class="material-symbols-outlined">close</mat-icon></button>
+    </div>
+
+    <div class="modal-body">
+      <h2 class="text-center font-600">Sujeto Social</h2>
+
+      <form class="grid" [formGroup]="form">
+        <div class="form-group">
+          <label>Dimensión espacial</label>
+          <ng-select notFoundText="Sin Resultados" placeholder="Selecciona el estado" formControlName="DimensionEspacialId">
+            <ng-option *ngFor="let dimension of dimensiones?.data" [value]="dimension?.id">{{ dimension?.name }}</ng-option>
+					</ng-select>
+          <p *ngIf="getFieldInvalid('DimensionEspacialId')" class="text-error">Campo requerido</p>
+        </div>
+        <div class="form-group">
+          <label>Sujeto social</label>
+          <textarea class="input-square input-block" onlyLetter [ngClass]="{ 'errorCampos': getFieldInvalid('name') }" placeholder="Nombre" formControlName="name">
+          </textarea>
+          <p *ngIf="getFieldInvalid('name')" class="text-error">Campo requerido</p>
+          <p *ngIf="error != ''"  class="text-error"> {{error}}</p>
+        </div>
+      </form>
+
+      <!-- <h2 class="text-rojo text-center" *ngIf="error == 1" > esta cedula ya existe. </h2> -->
+
+      <div class="footer">
+        <button mat-dialog-close="true" class="btn-secondary">Cancelar</button>
+        <button *ngIf="!edit" class="btn-primary" (click)="store()">Registrar <mat-icon class="loader" *ngIf="loading" >cached</mat-icon> </button>
+        <button *ngIf="edit" class="btn-primary" (click)="update()">Editar <mat-icon class="loader" *ngIf="loading" >cached</mat-icon> </button>
+      </div>
+    </div>
+
+  </mat-dialog-actions>
+</ng-template>
+
+<swal #deleteSwal title="Desea eliminar?" [showDenyButton]="true" denyButtonText="Cancelar" confirmButtonColor="#d16868" denyButtonColor="#68bcd1" icon="warning" confirmButtonText="Continuar" ></swal>
+<swal #SuccessRegisterSwal title="Registrado con exito" confirmButtonColor="#68bcd1" icon="success" confirmButtonText="Continuar" ></swal>
+<swal #SuccessDeleteSwal title="Eliminado con exito" confirmButtonColor="#68bcd1" icon="success" confirmButtonText="Continuar" ></swal>
+<swal #SuccessUpdateSwal title="Modificado con exito" confirmButtonColor="#68bcd1" icon="success" confirmButtonText="Continuar" ></swal>
